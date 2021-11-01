@@ -4,7 +4,7 @@ public class Student {
     private int id;
     private String name;
     private String password;
-    private int id1;
+    private int id2;
 
     public Student() {
     }
