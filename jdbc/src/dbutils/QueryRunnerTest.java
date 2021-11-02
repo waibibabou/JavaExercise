@@ -3,12 +3,11 @@ package dbutils;
 import bean.Student;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.junit.Test;
 import util.JDBCUtils;
 
 import java.sql.Connection;
-import java.util.List;
 
 public class QueryRunnerTest {
     @Test
@@ -28,9 +27,9 @@ public class QueryRunnerTest {
     public void testQuery() throws Exception {
         QueryRunner runner=new QueryRunner();
         Connection conn= JDBCUtils.getConnection();
-        String sql="select* from student";
-        BeanListHandler<Student> handler=new BeanListHandler<>(Student.class);
-        List<Student> student= runner.query(conn,sql,handler);
+        String sql="select name,id from student where id=?";
+        BeanHandler<Student> handler=new BeanHandler<>(Student.class);
+        Student student=runner.query(conn,sql,handler,2);
         System.out.println(student);
     }
 

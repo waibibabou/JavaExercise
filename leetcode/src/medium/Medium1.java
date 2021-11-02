@@ -202,9 +202,6 @@ public class Medium1 {
 
         return count;
     }
-
-
-
 }
 
 
