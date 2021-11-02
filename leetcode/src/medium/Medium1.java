@@ -202,6 +202,81 @@ public class Medium1 {
 
         return count;
     }
+
+
+    public boolean canPartition(int[] nums) {
+        int target=0;
+        for(int i:nums){
+            target+=i;
+        }
+        if(target%2==1)return false;
+        target/=2;
+        //dp[i][j]表示前i个能否组成j
+        boolean[][] dp=new boolean[nums.length+1][target];
+        dp[0][0]=true;
+        for(int i=1;i<=nums.length;i++){
+            for(int j=0;j<target;j++){
+                if(j<nums[i])dp[i][j]=dp[i-1][j];
+                //要当前位置
+                dp[i][j]=dp[i-1][j-nums[i]];
+                //不要当前位置
+                if(!dp[i][j])
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+        return dp[nums.length][target];
+
+    }
+    int temp;
+    @Test
+    public void test8(){
+        System.out.println(temp);
+        System.out.println(decodeString("33[a]2[bc]"));
+    }
+
+    public String decodeString(String s) {
+        StringBuffer stringBuffer=new StringBuffer();
+        if(s.indexOf('[')==-1)return s;
+
+        for(int i=0;i<s.length();i++){
+            int indexBegin=s.indexOf('[',i);
+            int indexEnd=0;
+            int count=0;
+            for(int m=indexBegin+1;m<s.length();m++){
+                char ch=s.charAt(m);
+                if(ch=='[')count++;
+                if(ch==']'){
+                    if(count>0)count--;
+                    else{
+                        indexEnd=m;
+                        break;
+                    }
+                }
+            }
+            int index=indexBegin-1;
+            while (index>=0&&Character.isDigit(s.charAt(index)))index--;
+
+            if(i<=index||i>indexEnd){
+                stringBuffer.append(s.charAt(i));
+            }
+            else{
+                index=indexBegin-1;
+                while (index>=0&&s.charAt(index)>='0'&&s.charAt(index)<='9')index--;
+
+                int repeatNumber=Integer.parseInt(s.substring(index+1,indexBegin));
+                String ss=decodeString(s.substring(indexBegin+1,indexEnd));
+                for(int j=0;j<repeatNumber;j++)stringBuffer.append(ss);
+                i=indexEnd;
+            }
+
+        }
+
+        return new String(stringBuffer);
+    }
+
+
+    
+
 }
 
 
@@ -222,3 +297,83 @@ class Node {
         neighbors = _neighbors;
     }
 }
+
+class MyQueue {
+    Deque<Integer> inStack;
+    Deque<Integer> outStack;
+
+    public MyQueue() {
+        inStack = new LinkedList<Integer>();
+        outStack = new LinkedList<Integer>();
+    }
+
+    public void push(int x) {
+        inStack.add(x);
+
+    }
+
+    public int pop() {
+        if(outStack.isEmpty()){
+            while(!inStack.isEmpty())outStack.add(inStack.pop());
+        }
+        return outStack.pop();
+    }
+
+    public int peek() {
+        if(outStack.isEmpty()){
+            while(!inStack.isEmpty())outStack.add(inStack.pop());
+        }
+        return outStack.peek();
+    }
+
+    public boolean empty() {
+        return inStack.isEmpty()&&outStack.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+
+class MyStack {
+
+    Queue<Integer>queueOut;
+    Queue<Integer>queueIn;
+
+    public MyStack() {
+        queueOut=new LinkedList<>();
+        queueIn=new LinkedList<>();
+    }
+
+    public void push(int x) {
+        queueIn.add(x);
+        while (!queueOut.isEmpty())queueIn.add(queueOut.poll());
+        while(!queueIn.isEmpty())queueOut.add(queueIn.poll());
+    }
+
+    public int pop() {
+        return queueOut.poll();
+    }
+
+    public int top() {
+        return queueOut.peek();
+    }
+
+    public boolean empty() {
+        return queueOut.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */

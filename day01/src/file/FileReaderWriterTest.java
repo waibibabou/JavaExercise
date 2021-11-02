@@ -82,11 +82,9 @@ public class FileReaderWriterTest {
         FileReader fileReader= null;
         FileWriter fileWriter= null;
         try {
-            File fileInput=new File("hello.txt");
-            File fileOutput=new File("hello1.txt");
 
-            fileReader = new FileReader(fileInput);
-            fileWriter = new FileWriter(fileOutput);
+            fileReader = new FileReader("hello.txt");
+            fileWriter = new FileWriter("hello1.txt");
 
             char[] cbuf=new char[5];
             int len;
