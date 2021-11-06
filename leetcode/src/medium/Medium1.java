@@ -275,6 +275,118 @@ public class Medium1 {
     }
 
 
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        boolean[][] flag=new boolean[image.length][image[0].length];
+        find(image,sr,sc,flag);
+        for(int i=0;i<image.length;i++){
+            for(int j=0;j<image[0].length;j++){
+                if(flag[i][j])image[i][j]=newColor;
+            }
+        }
+        return image;
+    }
+    public void find(int[][] image,int x,int y,boolean[][] flag){
+        flag[x][y]=true;
+        if(x>0&&flag[x-1][y]==false&&image[x-1][y]==image[x][y])find(image,x-1,y,flag);
+        if(x<image.length-1&&flag[x+1][y]==false&&image[x+1][y]==image[x][y])find(image,x+1,y,flag);
+        if(y>0&&flag[x][y-1]==false&&image[x][y-1]==image[x][y])find(image,x,y-1,flag);
+        if(y<image[0].length-1&&flag[x][y+1]==false&&image[x][y+1]==image[x][y])find(image,x,y+1,flag);
+    }
+
+    @Test
+    public void test9(){
+        System.out.println(Arrays.deepToString(updateMatrix(new int[][]{{0,0,0},{0,1,0},{1,1,1}})));
+    }
+
+    public int[][] updateMatrix(int[][] mat) {
+        int[][] distance=new int[mat.length][mat[0].length];
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                if(mat[i][j]==0)distance[i][j]=0;
+                else distance[i][j]=bfs(mat,i,j);
+            }
+        }
+        return distance;
+    }
+
+    int bfs(int[][] mat,int x,int y){
+        HashSet<List<Integer>>hashSet=new HashSet<>();
+        Queue<List<Integer>>queue=new LinkedList<>();
+        int step=-1;
+        List<Integer>temp=new ArrayList<>();
+        temp.add(x);
+        temp.add(y);
+        queue.add(temp);
+        hashSet.add(temp);
+
+        while(!queue.isEmpty()){
+            step++;
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                List<Integer>t=queue.poll();
+                int xx=t.get(0);
+                int yy=t.get(1);
+                if(mat[xx][yy]==0)return step;
+                if(xx>0){
+                    List<Integer>tt=new ArrayList<>();
+                    tt.add(xx-1);
+                    tt.add(yy);
+                    if(!hashSet.contains(tt))queue.add(tt);
+                }
+                if(xx<mat.length-1){
+                    List<Integer>tt=new ArrayList<>();
+                    tt.add(xx+1);
+                    tt.add(yy);
+                    if(!hashSet.contains(tt))queue.add(tt);
+                }
+                if(yy>0){
+                    List<Integer>tt=new ArrayList<>();
+                    tt.add(xx);
+                    tt.add(yy-1);
+                    if(!hashSet.contains(tt))queue.add(tt);
+                }
+                if(yy<mat[0].length-1){
+                    List<Integer>tt=new ArrayList<>();
+                    tt.add(xx);
+                    tt.add(yy+1);
+                    if(!hashSet.contains(tt))queue.add(tt);
+                }
+            }
+
+        }
+
+        return step;
+    }
+
+
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        boolean[] flag=new boolean[rooms.size()];
+        dfs1(rooms,0,flag);
+
+        for(int i=0;i<flag.length;i++){
+            if(!flag[i])return false;
+        }
+        return true;
+    }
+
+    void dfs1(List<List<Integer>> rooms,int pos,boolean[] flag){
+        flag[pos]=true;
+        List<Integer>list=rooms.get(pos);
+        for(int i:list){
+            if(!flag[i])dfs1(rooms,i,flag);
+        }
+    }
+
+    public int missingNumber(int[] nums) {
+        HashSet<Integer>hashSet=new HashSet<>();
+        for(int i=0;i<=nums.length;i++){
+            hashSet.add(i);
+        }
+        for(int i=0;i<nums.length;i++){
+            hashSet.remove(nums[i]);
+        }
+        return (int) hashSet.toArray()[0];
+    }
     
 
 }

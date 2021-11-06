@@ -14,4 +14,5 @@ public class InetAddressTest {
         System.out.println(inetAddress1.getHostAddress());
         System.out.println(inetAddress1.getHostName());
     }
+
 }
