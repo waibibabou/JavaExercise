@@ -13,6 +13,7 @@ public class Family implements Serializable {
   private Person mother = null;
   private Person father = null;
   private List   children = new ArrayList(5);
+  public static final long serialVersionUID=1234567L;
 
   public Family() {
   }
